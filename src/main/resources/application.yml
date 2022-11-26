@@ -38,7 +38,7 @@ spring:
   jpa:
     open-in-view: true
     hibernate:
-      ddl-auto: create
+      ddl-auto: none
     show-sql: true
 
   batch:
@@ -48,6 +48,7 @@ spring:
       initialize-schema: always
 
 topis:
-  scheme: https
-  host:
-
+  scheme: http
+  host: ws.bus.go.kr/api/rest/arrive
+  encoding_key: BMRFeWMe9AsctiK5ME5tJNZi4F%2FYFN2zZJV%2FiOsGvD5t8xZNNkG3PeLiDMKli8FQMgfCVujhNCO%2F1B7TK1NMeA%3D%3D
+  decoding_key: BMRFeWMe9AsctiK5ME5tJNZi4F/YFN2zZJV/iOsGvD5t8xZNNkG3PeLiDMKli8FQMgfCVujhNCO/1B7TK1NMeA==
