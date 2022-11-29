@@ -6,40 +6,24 @@ server:
       charset: utf-8
 
 spring:
-  output:
-    ansi:
-      enabled: always
-
   datasource:
-    mysql:
-      driver-class-name: com.mysql.cj.jdbc.Driver
-      url: jdbc:mysql://localhost:3306/public_data?serverTimezone=Asia/Seoul
-      username: public_data
-      password: java1234!
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/public_data?serverTimezone=Asia/Seoul
+    username: public_data
+    password: java1234!
 
-      hikari:
-        connection-timeout: 58000
-        max-lifetime: 118000
-
-    h2:
-      driver-class-name: org.h2.Driver
-      url: jdbc:h2:tcp://localhost/~/public_data
-      username: public_data
-      password: java1234!
-
-      console:
-        enabled: true
-        path: /h2-console
-
-      hikari:
-        connection-timeout: 58000
-        max-lifetime: 118000
+    hikari:
+      connection-timeout: 58000
+      max-lifetime: 118000
 
   jpa:
     open-in-view: true
     hibernate:
       ddl-auto: none
     show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
 
   batch:
     job:
@@ -47,8 +31,16 @@ spring:
     jdbc:
       initialize-schema: always
 
+  output:
+    ansi:
+      enabled: always
+
+  logging:
+    level:
+      org.hibernate.type.descriptor.sql: trace
+
 topis:
   scheme: http
-  host: ws.bus.go.kr/api/rest/arrive
-  encoding_key: BMRFeWMe9AsctiK5ME5tJNZi4F%2FYFN2zZJV%2FiOsGvD5t8xZNNkG3PeLiDMKli8FQMgfCVujhNCO%2F1B7TK1NMeA%3D%3D
-  decoding_key: BMRFeWMe9AsctiK5ME5tJNZi4F/YFN2zZJV/iOsGvD5t8xZNNkG3PeLiDMKli8FQMgfCVujhNCO/1B7TK1NMeA==
+  host: ws.bus.go.kr/api/rest
+  arrive_encoding_key: BMRFeWMe9AsctiK5ME5tJNZi4F%2FYFN2zZJV%2FiOsGvD5t8xZNNkG3PeLiDMKli8FQMgfCVujhNCO%2F1B7TK1NMeA%3D%3D
+  arrive_decoding_key: BMRFeWMe9AsctiK5ME5tJNZi4F/YFN2zZJV/iOsGvD5t8xZNNkG3PeLiDMKli8FQMgfCVujhNCO/1B7TK1NMeA==

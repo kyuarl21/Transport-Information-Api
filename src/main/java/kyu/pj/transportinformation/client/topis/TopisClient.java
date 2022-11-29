@@ -1,6 +1,5 @@
 package kyu.pj.transportinformation.client.topis;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import kyu.pj.transportinformation.common.properties.TopisProperty;
 import kyu.pj.transportinformation.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
@@ -35,9 +34,30 @@ public class TopisClient {
     public String getBusArrive() {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/getArrInfoByRouteAll")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .path("/arrive/getArrInfoByRouteAll")
+                        .queryParam("ServiceKey", topisProperty.getArriveDecodingKey())
                         .queryParam("busRouteId", "100100118")
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getStationByName(String stationName) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/stationinfo/getStationByName")
+                        .queryParam("ServiceKey", topisProperty.getArriveDecodingKey())
+                        .queryParam("stSrch", stationName)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {

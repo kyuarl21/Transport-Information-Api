@@ -15,6 +15,6 @@ public class TopisProperty {
 
     private String scheme;
     private String host;
-    private String encodingKey;
-    private String decodingKey;
+    private String arriveEncodingKey;
+    private String arriveDecodingKey;
 }
