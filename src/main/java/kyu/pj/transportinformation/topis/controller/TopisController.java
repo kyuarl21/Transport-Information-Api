@@ -19,9 +19,15 @@ public class TopisController {
 
     private final TopisService topisService;
 
+    @GetMapping("route-list")
+    public ResponseEntity<?> getRouteList(@RequestParam(value = "name", required = false) String stSrch) {
+        String result = topisService.getRouteList(stSrch);
+        return resultOk(result);
+    }
+
     @GetMapping("arrive")
-    public ResponseEntity<?> getBusArrive() {
-        String result = topisService.busArrive();
+    public ResponseEntity<?> getBusArrive(@RequestParam(value = "name", required = false) String routeId) {
+        String result = topisService.busArrive(routeId);
         return resultOk(result);
     }
 

@@ -14,8 +14,13 @@ public class TopisService {
 
     private final TopisClient topisClient;
 
-    public String busArrive() {
-        String result = topisClient.getBusArrive();
+    public String getRouteList(String stSrch) {
+        String result = topisClient.getRouteList(stSrch);
+        return result;
+    }
+
+    public String busArrive(String routeId) {
+        String result = topisClient.getBusArrive(routeId);
 
         return result;
     }

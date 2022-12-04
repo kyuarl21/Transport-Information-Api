@@ -31,12 +31,33 @@ public class TopisClient {
                 .build();
     }
 
-    public String getBusArrive() {
+    public String getRouteList(String stSrch) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/busRouteInfo/getBusRouteList")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("stSrch", stSrch)
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getBusArrive(String routeId) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/arrive/getArrInfoByRouteAll")
-                        .queryParam("ServiceKey", topisProperty.getArriveDecodingKey())
-                        .queryParam("busRouteId", "100100118")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
@@ -56,7 +77,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stationinfo/getStationByName")
-                        .queryParam("ServiceKey", topisProperty.getArriveDecodingKey())
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
                         .queryParam("stSrch", stationName)
                         .build()
                 ).exchangeToMono(response -> {
