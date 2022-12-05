@@ -39,6 +39,9 @@ spring:
     level:
       org.hibernate.type.descriptor.sql: trace
 
+  codec:
+    max-in-memory-size: 10MB
+
 topis:
   scheme: http
   host: ws.bus.go.kr/api/rest
