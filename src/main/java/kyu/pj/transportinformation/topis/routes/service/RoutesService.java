@@ -1,6 +1,6 @@
 package kyu.pj.transportinformation.topis.routes.service;
 
-import kyu.pj.transportinformation.client.topis.TopisClient;
+import kyu.pj.transportinformation.topis.client.TopisClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

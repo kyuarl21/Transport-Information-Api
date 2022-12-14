@@ -20,6 +20,14 @@ repositories {
 }
 
 dependencies {
+	// json
+	implementation("org.json", "json", "20220320")
+	implementation("com.fasterxml.jackson.core", "jackson-core")
+
+	// xml
+	implementation("javax.xml.bind:jaxb-api")
+	implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml")
+
 	implementation("org.springframework.boot:spring-boot-starter-batch")
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-validation")

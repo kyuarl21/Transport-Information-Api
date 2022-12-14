@@ -1,10 +1,11 @@
-package kyu.pj.transportinformation.client.topis;
+package kyu.pj.transportinformation.topis.client;
 
 import kyu.pj.transportinformation.common.properties.TopisProperty;
-import kyu.pj.transportinformation.exception.BadRequestException;
+import kyu.pj.transportinformation.handler.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -28,8 +29,7 @@ public class TopisClient {
                         .scheme(topisProperty.getScheme())
                         .host(topisProperty.getHost())
                         .build().toUriString()
-                ).defaultHeaders(this::defaultHeaders)
-                .exchangeStrategies(exchangeStrategies)
+                ).exchangeStrategies(exchangeStrategies)
                 .build();
     }
 
@@ -267,7 +267,7 @@ public class TopisClient {
     }
 
     private void defaultHeaders(HttpHeaders headers) {
-        headers.add("content-type", "application/json; charset=utf-8");
+        headers.setContentType(new MediaType(MediaType.APPLICATION_XML, StandardCharsets.UTF_8));
     }
 
     ExchangeStrategies exchangeStrategies = ExchangeStrategies.builder()

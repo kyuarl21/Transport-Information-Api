@@ -2,6 +2,7 @@ package kyu.pj.transportinformation.topis.stations.data.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.ToString;
 
 /**
  * 요청 URL (Request Url)
@@ -29,8 +30,9 @@ import lombok.Getter;
  *       posX	string	정류소 좌표X (GRS80)
  *       posY	string	정류소 좌표Y (GRS80)
  */
+@ToString
 @Getter
-public class StationInfoResponse {
+public class StationInfoResBodyList {
 
     @JsonProperty("stId")
     private String stId;
@@ -52,6 +54,4 @@ public class StationInfoResponse {
 
     @JsonProperty("posY")
     private String posY;
-
-    private StationInfoResponse() {}
 }
