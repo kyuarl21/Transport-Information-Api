@@ -4,10 +4,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import kyu.pj.transportinformation.topis.client.TopisClient;
 import kyu.pj.transportinformation.common.Status;
 import kyu.pj.transportinformation.handler.exception.BadRequestException;
-import kyu.pj.transportinformation.topis.common.TopisResponse;
+import kyu.pj.transportinformation.topis.client.TopisClient;;
+import kyu.pj.transportinformation.topis.stations.data.response.byid.StationResponseById;
+import kyu.pj.transportinformation.topis.stations.data.response.byname.StationResponseByName;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -24,19 +25,22 @@ public class StationsService {
 
     private final TopisClient topisClient;
 
-    public TopisResponse getStation(String station) {
-        boolean isNumber = isNumeric(station);
-        String stationRes = "";
+    public StationResponseByName getStationByName(String stationName) {
 
-        if (!isNumber) {
-            stationRes = topisClient.getStationByName(station);
-        } else {
-            stationRes = topisClient.getStationById(station);
-        }
+        String stationRes = topisClient.getStationByName(stationName);
 
         JSONObject jsonObject = XML.toJSONObject(stationRes);
 
-        return createStationVo(jsonObject.toString());
+        return jsonToStationVoByName(jsonObject.toString());
+    }
+
+    public StationResponseById getStationById(String stationId) {
+
+        String stationRes = topisClient.getStationById(stationId);
+
+        JSONObject jsonObject = XML.toJSONObject(stationRes);
+
+        return jsonToStationVoById(jsonObject.toString());
     }
 
     public String getRouteByStation(String stationId) {
@@ -54,7 +58,7 @@ public class StationsService {
         return isNumber;
     }
 
-    public TopisResponse createStationVo(String jsonString) {
+    public StationResponseByName jsonToStationVoByName(String jsonString) {
         ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json()
                 .featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -62,7 +66,22 @@ public class StationsService {
                 .build();
 
         try {
-            return objectMapper.readValue(jsonString, TopisResponse.class);
+            return objectMapper.readValue(jsonString, StationResponseByName.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);
+        }
+    }
+
+    public StationResponseById jsonToStationVoById(String jsonString) {
+        ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json()
+                .featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
+                .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+                .modules(new JavaTimeModule())
+                .build();
+
+        try {
+            return objectMapper.readValue(jsonString, StationResponseById.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);

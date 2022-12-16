@@ -2,7 +2,7 @@ plugins {
 	java
 	id("org.springframework.boot") version "2.7.6"
 	id("io.spring.dependency-management") version "1.0.15.RELEASE"
-	id("com.google.cloud.tools.jib") version "3.2.1"
+	id("com.google.cloud.tools.jib") version "3.3.1"
 }
 
 group = "kyu.pj"
@@ -21,8 +21,9 @@ repositories {
 
 dependencies {
 	// json
-	implementation("org.json", "json", "20220320")
+	implementation("org.json", "json", "20220924")
 	implementation("com.fasterxml.jackson.core", "jackson-core")
+	implementation("com.googlecode.json-simple:json-simple:1.1.1")
 
 	// xml
 	implementation("javax.xml.bind:jaxb-api")

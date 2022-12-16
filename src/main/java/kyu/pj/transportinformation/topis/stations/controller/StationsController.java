@@ -1,6 +1,6 @@
 package kyu.pj.transportinformation.topis.stations.controller;
 
-import kyu.pj.transportinformation.topis.common.TopisResponse;
+import kyu.pj.transportinformation.topis.stations.data.response.byname.StationResponseByName;
 import kyu.pj.transportinformation.topis.stations.service.StationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,8 +20,8 @@ public class StationsController {
     private final StationsService stationsService;
 
     @GetMapping("station/{station}")
-    public ResponseEntity<?> getStation(@PathVariable("station") @NotBlank(message = "정류소 정보는 필수입니다.") String station) {
-        TopisResponse result = stationsService.getStation(station);
+    public ResponseEntity<?> getStation(@PathVariable("station") @NotBlank(message = "정류소 정보는 필수입니다.") String stationName) {
+        StationResponseByName result = stationsService.getStationByName(stationName);
         return resultOk(result);
     }
 

@@ -117,12 +117,12 @@ public class TopisClient {
                 }).block();
     }
 
-    public String getStationByName(String station) {
+    public String getStationByName(String stationName) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stationinfo/getStationByName")
                         .queryParam("ServiceKey", topisProperty.getDecodingKey())
-                        .queryParam("stSrch", station)
+                        .queryParam("stSrch", stationName)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
@@ -138,12 +138,12 @@ public class TopisClient {
                 }).block();
     }
 
-    public String getStationById(String station) {
+    public String getStationById(String stationId) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stationinfo/getStationByUid")
                         .queryParam("ServiceKey", topisProperty.getDecodingKey())
-                        .queryParam("arsId", station)
+                        .queryParam("arsId", stationId)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {

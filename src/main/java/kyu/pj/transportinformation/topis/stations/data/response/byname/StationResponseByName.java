@@ -1,4 +1,4 @@
-package kyu.pj.transportinformation.topis.common;
+package kyu.pj.transportinformation.topis.stations.data.response.byname;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
@@ -32,8 +32,8 @@ import lombok.ToString;
  */
 @ToString
 @Getter
-public class TopisResponse<T> {
+public class StationResponseByName<T> {
 
     @JsonProperty("ServiceResult")
-    TopisResResult<T> serviceResult;
+    private StationResResultByName<T> serviceResult;
 }
