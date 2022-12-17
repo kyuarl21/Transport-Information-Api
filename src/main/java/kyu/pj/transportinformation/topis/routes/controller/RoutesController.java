@@ -1,5 +1,6 @@
 package kyu.pj.transportinformation.topis.routes.controller;
 
+import kyu.pj.transportinformation.topis.routes.data.response.bystation.RouteByStationResponse;
 import kyu.pj.transportinformation.topis.routes.data.response.info.RouteInfoResponse;
 import kyu.pj.transportinformation.topis.routes.data.response.list.RouteListResponse;
 import kyu.pj.transportinformation.topis.routes.data.response.path.RoutePathResponse;
@@ -42,9 +43,9 @@ public class RoutesController {
         return resultOk(result);
     }
 
-    @GetMapping("station-route/{route_id}")
-    public ResponseEntity<?> getStationByRoute(@PathVariable("route_id") @NotBlank(message = "노선 id는 필수입니다.") String routeId) {
-        String result = routesService.getStationByRoute(routeId);
+    @GetMapping("route-station/{station_id}")
+    public ResponseEntity<?> getStationByRoute(@PathVariable("station_id") @NotBlank(message = "정류소 id는 필수입니다.") String stationId) {
+        RouteByStationResponse result = routesService.getRouteByStation(stationId);
         return resultOk(result);
     }
 }

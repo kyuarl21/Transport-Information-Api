@@ -7,8 +7,8 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kyu.pj.transportinformation.common.Status;
 import kyu.pj.transportinformation.handler.exception.BadRequestException;
 import kyu.pj.transportinformation.inquiry.data.response.StationArriveResDto;
-import kyu.pj.transportinformation.topis.stations.data.response.byid.StationResponseById;
-import kyu.pj.transportinformation.topis.stations.data.response.byname.StationResponseByName;
+import kyu.pj.transportinformation.topis.stations.data.response.byid.StationByIdResponse;
+import kyu.pj.transportinformation.topis.stations.data.response.byname.StationByNameResponse;
 import kyu.pj.transportinformation.topis.stations.service.StationsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,13 +29,13 @@ public class InquiryService {
 
     public Object getStationArrive(String stationName) {
 
-        List<StationResponseByName> stationResponseByNameList = stationsService.getStationByName(stationName).getServiceResult().getMsgBody().getItemList();
+        List<StationByNameResponse> stationByNameResponseList = stationsService.getStationByName(stationName).getServiceResult().getMsgBody().getItemList();
         StationArriveResDto stationArriveResDto = new StationArriveResDto();
 
-        JSONObject jsonObject = new JSONObject(stationResponseByNameList.get(0));
+        JSONObject jsonObject = new JSONObject(stationByNameResponseList.get(0));
         String stationId = jsonObject.get("arsId").toString();
-        List<StationResponseById> stationResponseByIdList = stationsService.getStationById(stationId).getServiceResult().getMsgBody().getItemList();
-        System.out.println(stationResponseByIdList);
+        List<StationByIdResponse> stationByIdResponseList = stationsService.getStationById(stationId).getServiceResult().getMsgBody().getItemList();
+        System.out.println(stationByIdResponseList);
 
         /*for (int i = 0; i < stationResponseByNameList.size(); i++) {
             JSONObject jsonObject = new JSONObject(stationResponseByNameList.get(i));
@@ -48,7 +48,7 @@ public class InquiryService {
             }
         }*/
 
-        return stationResponseByIdList;
+        return stationByIdResponseList;
     }
 
     public StationArriveResDto resVoToDto(String jsonString) {

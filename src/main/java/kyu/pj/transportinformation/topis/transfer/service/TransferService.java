@@ -1,4 +1,4 @@
-package kyu.pj.transportinformation.topis.routes.service;
+package kyu.pj.transportinformation.topis.transfer.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -7,10 +7,10 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kyu.pj.transportinformation.common.Status;
 import kyu.pj.transportinformation.handler.exception.BadRequestException;
 import kyu.pj.transportinformation.topis.client.TopisClient;
-import kyu.pj.transportinformation.topis.routes.data.response.bystation.RouteByStationResponse;
-import kyu.pj.transportinformation.topis.routes.data.response.info.RouteInfoResponse;
-import kyu.pj.transportinformation.topis.routes.data.response.list.RouteListResponse;
-import kyu.pj.transportinformation.topis.routes.data.response.path.RoutePathResponse;
+import kyu.pj.transportinformation.topis.transfer.data.response.busnsub.TransferBusNSubResponse;
+import kyu.pj.transportinformation.topis.transfer.data.response.bybus.TransferByBusResponse;
+import kyu.pj.transportinformation.topis.transfer.data.response.bysubway.TransferBySubResponse;
+import kyu.pj.transportinformation.topis.transfer.data.response.info.TransferPathResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.json.JSONObject;
@@ -23,43 +23,48 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class RoutesService {
+public class TransferService {
 
     private final TopisClient topisClient;
 
-    public RouteListResponse getRouteList(String search) {
-        String routeListRes = topisClient.getRouteList(search);
+    public TransferPathResponse getTransferPath(String search) {
 
-        JSONObject jsonObject = XML.toJSONObject(routeListRes);
+        String transferPathRes = topisClient.getTransferPath(search);
 
-        return jsonToRouteListVo(jsonObject.toString());
+        JSONObject jsonObject = XML.toJSONObject(transferPathRes);
+
+        return jsonToTransferPathResponse(jsonObject.toString());
     }
 
-    public RouteInfoResponse getRouteInfo(String routeId) {
-        String routeInfoRes = topisClient.getRouteInfo(routeId);
+    public TransferByBusResponse getTransferByBus(String startX, String startY, String endX, String endY) {
 
-        JSONObject jsonObject = XML.toJSONObject(routeInfoRes);
+        String transferByBusRes = topisClient.getTransferByBus(startX, startY, endX, endY);
 
-        return jsonToRouteInfoVo(jsonObject.toString());
+        JSONObject jsonObject = XML.toJSONObject(transferByBusRes);
+        System.out.println(jsonObject);
+
+        return jsonToTransferByBusResponse(jsonObject.toString());
     }
 
-    public RoutePathResponse getRoutePath(String routeId) {
-        String routePathRes = topisClient.getRoutePath(routeId);
+    public TransferBySubResponse getTransferBySubway(String startX, String startY, String endX, String endY) {
 
-        JSONObject jsonObject = XML.toJSONObject(routePathRes);
+        String transferBySubRes = topisClient.getTransferBySubway(startX, startY, endX, endY);
 
-        return jsonToRoutePathVo(jsonObject.toString());
+        JSONObject jsonObject = XML.toJSONObject(transferBySubRes);
+
+        return jsonToTransferBySubResponse(jsonObject.toString());
     }
 
-    public RouteByStationResponse getRouteByStation(String stationId) {
-        String routeRes = topisClient.getRouteByStation(stationId);
+    public TransferBusNSubResponse getTransferByBusNSub(String startX, String startY, String endX, String endY) {
 
-        JSONObject jsonObject = XML.toJSONObject(routeRes);
+        String transferBusNSubRes = topisClient.getTransferByBusNSub(startX, startY, endX, endY);
 
-        return jsonToRouteVoByStation(jsonObject.toString());
+        JSONObject jsonObject = XML.toJSONObject(transferBusNSubRes);
+
+        return jsonToTransferBusNSubResponse(jsonObject.toString());
     }
 
-    public RouteListResponse jsonToRouteListVo(String jsonString) {
+    public TransferPathResponse jsonToTransferPathResponse(String jsonString) {
         ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json()
                 .featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -67,14 +72,14 @@ public class RoutesService {
                 .build();
 
         try {
-            return objectMapper.readValue(jsonString, RouteListResponse.class);
+            return objectMapper.readValue(jsonString, TransferPathResponse.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);
         }
     }
 
-    public RouteInfoResponse jsonToRouteInfoVo(String jsonString) {
+    public TransferByBusResponse jsonToTransferByBusResponse(String jsonString) {
         ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json()
                 .featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -82,14 +87,14 @@ public class RoutesService {
                 .build();
 
         try {
-            return objectMapper.readValue(jsonString, RouteInfoResponse.class);
+            return objectMapper.readValue(jsonString, TransferByBusResponse.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);
         }
     }
 
-    public RoutePathResponse jsonToRoutePathVo(String jsonString) {
+    public TransferBySubResponse jsonToTransferBySubResponse(String jsonString) {
         ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json()
                 .featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -97,14 +102,14 @@ public class RoutesService {
                 .build();
 
         try {
-            return objectMapper.readValue(jsonString, RoutePathResponse.class);
+            return objectMapper.readValue(jsonString, TransferBySubResponse.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);
         }
     }
 
-    public RouteByStationResponse jsonToRouteVoByStation(String jsonString) {
+    public TransferBusNSubResponse jsonToTransferBusNSubResponse(String jsonString) {
         ObjectMapper objectMapper = Jackson2ObjectMapperBuilder.json()
                 .featuresToDisable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                 .featuresToDisable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
@@ -112,7 +117,7 @@ public class RoutesService {
                 .build();
 
         try {
-            return objectMapper.readValue(jsonString, RouteByStationResponse.class);
+            return objectMapper.readValue(jsonString, TransferBusNSubResponse.class);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
             throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);

@@ -96,12 +96,12 @@ public class TopisClient {
                 }).block();
     }
 
-    public String getStationByRoute(String routeId) {
+    public String getRouteByStation(String stationId) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/busRouteInfo/getStaionByRoute")
+                        .path("/stationinfo/getRouteByStation")
                         .queryParam("ServiceKey", topisProperty.getDecodingKey())
-                        .queryParam("busRouteId", routeId)
+                        .queryParam("arsId", stationId)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
@@ -159,12 +159,12 @@ public class TopisClient {
                 }).block();
     }
 
-    public String getRouteByStation(String stationId) {
+    public String getStationByRoute(String routeId) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
-                        .path("/stationinfo/getRouteByStation")
+                        .path("/busRouteInfo/getStaionByRoute")
                         .queryParam("ServiceKey", topisProperty.getDecodingKey())
-                        .queryParam("arsId", stationId)
+                        .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
@@ -251,6 +251,122 @@ public class TopisClient {
                         .path("/arrive/getArrInfoByRouteAll")
                         .queryParam("ServiceKey", topisProperty.getDecodingKey())
                         .queryParam("busRouteId", routeId)
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getBusArriveByStation(String stationId, String routeId, String order) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/arrive/getArrInfoByRoute")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("stId", stationId)
+                        .queryParam("busRouteId", routeId)
+                        .queryParam("ord", order)
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getTransferPath(String search) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/pathinfo/getLocationInfo")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("stSrch", search)
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getTransferByBus(String startX, String startY, String endX, String endY) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/pathinfo/getPathInfoByBus")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("startX", startX)
+                        .queryParam("startY", startY)
+                        .queryParam("endX", endX)
+                        .queryParam("endY", endY)
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getTransferBySubway(String startX, String startY, String endX, String endY) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/pathinfo/getPathInfoBySubway")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("startX", startX)
+                        .queryParam("startY", startY)
+                        .queryParam("endX", endX)
+                        .queryParam("endY", endY)
+                        .build()
+                ).exchangeToMono(response -> {
+                    if (response.statusCode().is2xxSuccessful()) {
+                        return response.bodyToMono(String.class);
+                    }
+                    return response.createException().flatMap(it -> {
+                        String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
+                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                    });
+                }).onErrorResume(error -> {
+                    log.debug("error : {}", error.getMessage());
+                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                }).block();
+    }
+
+    public String getTransferByBusNSub(String startX, String startY, String endX, String endY) {
+        return webClient.get()
+                .uri(uriBuilder -> uriBuilder
+                        .path("/pathinfo/getPathInfoByBusNSub")
+                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("startX", startX)
+                        .queryParam("startY", startY)
+                        .queryParam("endX", endX)
+                        .queryParam("endY", endY)
                         .build()
                 ).exchangeToMono(response -> {
                     if (response.statusCode().is2xxSuccessful()) {
