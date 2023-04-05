@@ -1,5 +1,6 @@
 package kyu.pj.transportinformation.inquiry.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import kyu.pj.transportinformation.inquiry.data.response.StationArriveResDto;
 import kyu.pj.transportinformation.inquiry.service.InquiryService;
 import lombok.RequiredArgsConstructor;
@@ -9,8 +10,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.NotBlank;
 
 import static kyu.pj.transportinformation.common.utils.ResultUtils.resultOk;
 

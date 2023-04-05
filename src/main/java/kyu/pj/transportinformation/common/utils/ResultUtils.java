@@ -22,6 +22,9 @@ public class ResultUtils {
         return ResponseEntity.ok(new DataResult<T>(Status.SUCCESS_CODE, Status.SUCCESS_MSG, data));
     }
 
+    /**
+     * HTTP CODE 201
+     */
     public static ResponseEntity<Result> resultCreated() {
         return ResponseEntity.status(HttpStatus.CREATED).body(new Result(Status.SUCCESS_CODE, Status.SUCCESS_MSG));
     }

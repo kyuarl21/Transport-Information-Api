@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kyu.pj.transportinformation.common.Status;
-import kyu.pj.transportinformation.handler.exception.BadRequestException;
+import kyu.pj.transportinformation.exception.BadRequestException;
 import kyu.pj.transportinformation.inquiry.data.response.StationArriveResDto;
 import kyu.pj.transportinformation.topis.stations.data.response.byid.StationByIdResponse;
 import kyu.pj.transportinformation.topis.stations.data.response.byname.StationByNameResponse;
@@ -37,16 +37,16 @@ public class InquiryService {
         List<StationByIdResponse> stationByIdResponseList = stationsService.getStationById(stationId).getServiceResult().getMsgBody().getItemList();
         System.out.println(stationByIdResponseList);
 
-        /*for (int i = 0; i < stationResponseByNameList.size(); i++) {
-            JSONObject jsonObject = new JSONObject(stationResponseByNameList.get(i));
-            String stationId = jsonObject.get("arsId").toString();
-            List<StationResponseById> stationResponseByIdList = stationsService.getStationById(stationId).getServiceResult().getMsgBody().getItemList();
-
-            for (int j = 0; j < stationResponseByIdList.size(); j++) {
-                System.out.println(stationResponseByIdList);
-
-            }
-        }*/
+//        for (int i = 0; i < stationResponseByNameList.size(); i++) {
+//            JSONObject jsonObject = new JSONObject(stationResponseByNameList.get(i));
+//            String stationId = jsonObject.get("arsId").toString();
+//            List<StationResponseById> stationResponseByIdList = stationsService.getStationById(stationId).getServiceResult().getMsgBody().getItemList();
+//
+//            for (int j = 0; j < stationResponseByIdList.size(); j++) {
+//                System.out.println(stationResponseByIdList);
+//
+//            }
+//        }
 
         return stationByIdResponseList;
     }

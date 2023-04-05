@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import kyu.pj.transportinformation.common.Status;
-import kyu.pj.transportinformation.handler.exception.BadRequestException;
+import kyu.pj.transportinformation.exception.BadRequestException;
 import kyu.pj.transportinformation.topis.arrive.data.response.bystation.BusArriveByStationResponse;
 import kyu.pj.transportinformation.topis.arrive.data.response.info.BusArriveResponse;
 import kyu.pj.transportinformation.topis.client.TopisClient;

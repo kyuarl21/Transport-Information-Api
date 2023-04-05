@@ -1,4 +1,4 @@
-package kyu.pj.transportinformation.handler.exception;
+package kyu.pj.transportinformation.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

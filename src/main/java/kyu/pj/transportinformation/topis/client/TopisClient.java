@@ -1,7 +1,7 @@
 package kyu.pj.transportinformation.topis.client;
 
 import kyu.pj.transportinformation.common.properties.TopisProperty;
-import kyu.pj.transportinformation.handler.exception.BadRequestException;
+import kyu.pj.transportinformation.exception.BadRequestException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
