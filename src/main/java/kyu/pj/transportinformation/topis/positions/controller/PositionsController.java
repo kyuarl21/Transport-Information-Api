@@ -1,5 +1,6 @@
 package kyu.pj.transportinformation.topis.positions.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import kyu.pj.transportinformation.topis.positions.data.response.bybus.BusPositionByBusResponse;
 import kyu.pj.transportinformation.topis.positions.data.response.byroute.BusPositionByRouteResponse;
 import kyu.pj.transportinformation.topis.positions.data.response.bystation.BusPositionByStationResponse;
@@ -8,8 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.constraints.NotBlank;
 
 import static kyu.pj.transportinformation.common.utils.ResultUtils.resultOk;
 

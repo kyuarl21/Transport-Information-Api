@@ -1,5 +1,6 @@
 package kyu.pj.transportinformation.topis.routes.controller;
 
+import jakarta.validation.constraints.NotBlank;
 import kyu.pj.transportinformation.topis.routes.data.response.bystation.RouteByStationResponse;
 import kyu.pj.transportinformation.topis.routes.data.response.info.RouteInfoResponse;
 import kyu.pj.transportinformation.topis.routes.data.response.list.RouteListResponse;
@@ -12,8 +13,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.constraints.NotBlank;
 
 import static kyu.pj.transportinformation.common.utils.ResultUtils.resultOk;
 

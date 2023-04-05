@@ -1,10 +1,11 @@
 package kyu.pj.transportinformation.topis.client;
 
-import kyu.pj.transportinformation.common.properties.TopisProperty;
-import kyu.pj.transportinformation.exception.BadRequestException;
+import kyu.pj.transportinformation.common.properties.TopisProperties;
+import kyu.pj.transportinformation.exception.ResponseException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.ExchangeStrategies;
@@ -19,15 +20,15 @@ import java.nio.charset.StandardCharsets;
 public class TopisClient {
 
     private final WebClient webClient;
-    private final TopisProperty topisProperty;
+    private final TopisProperties topisProperties;
 
     @Autowired
-    public TopisClient(TopisProperty topisProperty) {
-        this.topisProperty = topisProperty;
+    public TopisClient(TopisProperties topisProperties) {
+        this.topisProperties = topisProperties;
         this.webClient = WebClient.builder()
                 .baseUrl(UriComponentsBuilder.newInstance()
-                        .scheme(topisProperty.getScheme())
-                        .host(topisProperty.getHost())
+                        .scheme(topisProperties.getScheme())
+                        .host(topisProperties.getHost())
                         .build().toUriString()
                 ).exchangeStrategies(exchangeStrategies)
                 .build();
@@ -37,7 +38,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/busRouteInfo/getBusRouteList")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("stSrch", search)
                         .build()
                 ).exchangeToMono(response -> {
@@ -46,11 +47,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -58,7 +59,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/busRouteInfo/getRouteInfo")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -67,11 +68,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -79,7 +80,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/busRouteInfo/getRoutePath")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -88,11 +89,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -100,7 +101,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stationinfo/getRouteByStation")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("arsId", stationId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -109,11 +110,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -121,7 +122,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stationinfo/getStationByName")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("stSrch", stationName)
                         .build()
                 ).exchangeToMono(response -> {
@@ -130,11 +131,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -142,7 +143,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/stationinfo/getStationByUid")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("arsId", stationId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -151,11 +152,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -163,7 +164,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/busRouteInfo/getStaionByRoute")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -172,11 +173,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -184,7 +185,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/buspos/getBusPosByRtid")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -193,11 +194,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -205,7 +206,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/buspos/getBusPosByRouteSt")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("busRouteId", routeId)
                         .queryParam("startOrd", startStation)
                         .queryParam("endOrd", endStation)
@@ -216,11 +217,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -228,7 +229,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/buspos/getBusPosByVehId")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("vehId", busId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -237,11 +238,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -249,7 +250,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/arrive/getArrInfoByRouteAll")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("busRouteId", routeId)
                         .build()
                 ).exchangeToMono(response -> {
@@ -258,11 +259,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -270,7 +271,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/arrive/getArrInfoByRoute")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("stId", stationId)
                         .queryParam("busRouteId", routeId)
                         .queryParam("ord", order)
@@ -281,11 +282,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -293,7 +294,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/pathinfo/getLocationInfo")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("stSrch", search)
                         .build()
                 ).exchangeToMono(response -> {
@@ -302,11 +303,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -314,7 +315,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/pathinfo/getPathInfoByBus")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("startX", startX)
                         .queryParam("startY", startY)
                         .queryParam("endX", endX)
@@ -326,11 +327,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -338,7 +339,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/pathinfo/getPathInfoBySubway")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("startX", startX)
                         .queryParam("startY", startY)
                         .queryParam("endX", endX)
@@ -350,11 +351,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 
@@ -362,7 +363,7 @@ public class TopisClient {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder
                         .path("/pathinfo/getPathInfoByBusNSub")
-                        .queryParam("ServiceKey", topisProperty.getDecodingKey())
+                        .queryParam("ServiceKey", topisProperties.getDecodingKey())
                         .queryParam("startX", startX)
                         .queryParam("startY", startY)
                         .queryParam("endX", endX)
@@ -374,11 +375,11 @@ public class TopisClient {
                     }
                     return response.createException().flatMap(it -> {
                         String bodyAsString = it.getResponseBodyAsString(StandardCharsets.UTF_8);
-                        return Mono.error(new BadRequestException(111, bodyAsString)); // TODO
+                        return Mono.error(new ResponseException((HttpStatus) response.statusCode(), response.statusCode().value(), bodyAsString)); // TODO
                     });
                 }).onErrorResume(error -> {
                     log.debug("error : {}", error.getMessage());
-                    return Mono.error(new BadRequestException(111, error.getMessage())); // TODO
+                    return Mono.error(new IllegalArgumentException(error.getMessage())); // TODO
                 }).block();
     }
 

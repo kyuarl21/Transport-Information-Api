@@ -5,9 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import kyu.pj.transportinformation.common.Status;
 import kyu.pj.transportinformation.exception.BadRequestException;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
+
+import static kyu.pj.transportinformation.common.Status.*;
 
 public class MapperUtils {
 
@@ -22,7 +23,7 @@ public class MapperUtils {
             return objectMapper.readTree(jsonString);
         } catch (JsonProcessingException e) {
             e.printStackTrace();
-            throw new BadRequestException(Status.FAIL_CODE, Status.FAIL_MSG);
+            throw new BadRequestException(BAD_REQUEST_CODE, BAD_REQUEST_MSG);
         }
     }
 }

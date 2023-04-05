@@ -2,9 +2,10 @@ package kyu.pj.transportinformation.common.utils;
 
 import kyu.pj.transportinformation.common.DataResult;
 import kyu.pj.transportinformation.common.Result;
-import kyu.pj.transportinformation.common.Status;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+
+import static kyu.pj.transportinformation.common.Status.*;
 
 public class ResultUtils {
 
@@ -12,20 +13,20 @@ public class ResultUtils {
      * HTTP CODE 200
      */
     public static ResponseEntity<Result> resultOk() {
-        return ResponseEntity.ok(new Result(Status.SUCCESS_CODE, Status.SUCCESS_MSG));
+        return ResponseEntity.ok(new Result(SUCCESS_CODE, SUCCESS_MSG));
     }
 
     /**
      * HTTP CODE 200
      */
     public static <T> ResponseEntity<DataResult<T>> resultOk(T data) {
-        return ResponseEntity.ok(new DataResult<T>(Status.SUCCESS_CODE, Status.SUCCESS_MSG, data));
+        return ResponseEntity.ok(new DataResult<T>(SUCCESS_CODE, SUCCESS_MSG, data));
     }
 
     /**
      * HTTP CODE 201
      */
     public static ResponseEntity<Result> resultCreated() {
-        return ResponseEntity.status(HttpStatus.CREATED).body(new Result(Status.SUCCESS_CODE, Status.SUCCESS_MSG));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new Result(SUCCESS_CODE, SUCCESS_MSG));
     }
 }
